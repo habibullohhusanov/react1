@@ -16,11 +16,6 @@ function HookForm({create}) {
   }
   return (
     <form action="">
-      <b>
-        <p>{post.title}</p>
-      </b><b>
-        <p>{post.body}</p>
-      </b>
       <Input type="text" placeholder="title" value={post.title} onChange={e => setPost({ ...post, title: e.target.value })} />
       <Input type="text" placeholder="body" value={post.body} onChange={e => setPost({ ...post, body: e.target.value })} />
       <Button onClick={submit}>OK</Button>

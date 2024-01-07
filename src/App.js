@@ -1,53 +1,36 @@
-import Input from './components/UI/jsx/input';
-import Select from './components/UI/jsx/select';
+import Button from './components/UI/jsx/button';
+import Modal from './components/UI/jsx/modal';
 import HookForm from './components/hook/hookForm';
+import HookPostFilter from './components/hook/hookPostFilter';
 import HookPostList from './components/hook/hookPostList';
+import { usePosts } from './components/hook/use/usePosts';
 import './style/App.css';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 function App() {
-  const [posts, setPosts] = useState([
-    { id: 1, title: "PHP", body: "Learned" },
-    { id: 2, title: "PHYTON", body: "Learning" },
-    { id: 3, title: "A REACT", body: "Learning" },
-  ]);
-  const [selectedSort, setSelectedSort] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  function getSortedPosts() {
-    if(selectedSort) {
-      return [...posts].sort((a,b) => a[selectedSort].localeCompare(b[selectedSort]));
-    } else {
-      return posts
-    }
-  }
-  // const sortedPosts = getSortedPosts();
+  const [posts, setPosts] = useState([]);
+  const [filter, setFilter] = useState({ sort: '', query: '' });
+  const [modal, setModal] = useState(false)
+
+  const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
+    setModal(false);
   }
   const removePost = (post) => {
     setPosts(posts.filter(p => p.id !== post.id));
   }
-  const sortPosts = (sort) => {
-    setSelectedSort(sort);
-    // changed setPosts([...posts].sort((a,b) => a[sort].localeCompare(b[sort])))
-  }
   return (
     <div className="App">
-      <HookForm create={createPost} />
       <div>
-        <Input value={searchQuery} onChange={event => setSearchQuery(event.target.value)} placeholder="Search ..." />
-        <Select value={selectedSort} defaultValue="Select one" options={[
-          { value: "title", name: "Title" },
-          { value: "body", name: "Body" },
-        ]}
-        onChange={sortPosts}
-        />
+        <Button onClick={(e) => setModal(true)}>Create</Button>
+        <Modal visiable={modal} setVisiable={setModal}>
+          <HookForm create={createPost} />
+        </Modal>
       </div>
-      {posts.length !== 0
-        ? <HookPostList remove={removePost} posts={getSortedPosts()} title={"PHP"} />
-        : <div>Empty</div>
-
-      }
+      <HookPostFilter filter={filter} setFilter={setFilter} />
+      <HookPostList remove={removePost} posts={sortedAndSearchedPosts} title={"PHP"} />
     </div>
   );
 }
