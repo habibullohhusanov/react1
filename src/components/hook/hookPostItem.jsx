@@ -6,7 +6,8 @@ function HookPostItem({ post, number, remove }) {
   return (
     <div>
       <div>
-        <h1>{number}</h1>
+        {/*<h1>{number}</h1>*/}
+        <h1>{post.id}</h1>
         <p>{post.title}</p>
         <p>{post.body}</p>
       </div>
