@@ -1,8 +1,9 @@
 import React from 'react'
 import Button from '../UI/jsx/button'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 function HookPostItem({ post, number, remove }) {
-
+  const router = useHistory();
   return (
     <div>
       <div>
@@ -13,6 +14,7 @@ function HookPostItem({ post, number, remove }) {
       </div>
       <div>
         <Button onClick={() => remove(post)} >Remove</Button>
+        <Button onClick={() => router.push(`/posts/${post.id}`)} >Show</Button>
       </div>
     </div>
   )
