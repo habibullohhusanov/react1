@@ -10,6 +10,7 @@ import './../style/App.css';
 import { useFetching } from './../components/hook/use/useFetching';
 import { getPageCount } from './../utils/pages';
 import Pagination from './../components/UI/jsx/pagination';
+import Loading from '../components/UI/jsx/loading';
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -42,7 +43,6 @@ function Posts() {
 
   const changePage = (page) => {
     setPage(page);
-    fetchPosts(limit, page);
   }
 
   return (
@@ -56,7 +56,7 @@ function Posts() {
       <HookPostFilter filter={filter} setFilter={setFilter} />
       {postError && <h1>Error {postError}</h1>}
       {postIsLoading
-        ? <h1>Loading</h1>
+        ? <Loading />
         : <HookPostList remove={removePost} posts={sortedAndSearchedPosts} title={"PHP"} />
       }
       <h1>Current page: {page}</h1>
